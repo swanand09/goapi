@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -22,7 +23,8 @@ func catchError(err error, w http.ResponseWriter) bool {
 
 func processFile(routeName string, responseWriter http.ResponseWriter, request *http.Request) {
 
-	file, _, err := request.FormFile("file")
+	//file, _, err := request.FormFile("file")
+	file, err := os.Open("matrix.csv")
 	if catchError(err, responseWriter) == true {
 		return
 	}
