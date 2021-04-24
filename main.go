@@ -20,44 +20,89 @@ func catchError(err error, w http.ResponseWriter) bool {
 	return false
 }
 
-func computeFile(routeName string, responseWriter http.ResponseWriter, request *http.Request){
+func processFile(routeName string, responseWriter http.ResponseWriter, request *http.Request) {
+
+	file, _, err := request.FormFile("file")
+	if catchError(err, responseWriter) == true {
+		return
+	}
+
+	defer file.Close()
+	records, err := csv.NewReader(file).ReadAll()
+	if catchError(err, responseWriter) == true {
+		return
+	}
+
+	var response string
 
 	switch routeName {
-		case 'echo':
-			
-		case 'invert':
-			statement(s)
-		case 'flatten':
-			statement(s)
-		case 'sum':
-			statement(s)	
-		case 'multiply':
-			statement(s)
-		
-		default:
-			statement(s)    
+
+	case "echo":
+
+		for _, row := range records {
+			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+		}
+
+	case "invert":
+
+		for _, row := range records {
+			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+		}
+
+	case "flatten":
+
+		for _, row := range records {
+			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+		}
+
+	case "sum":
+
+		for _, row := range records {
+			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+		}
+
+	case "multiply":
+
+		for _, row := range records {
+			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+		}
+
+	default:
+
+		for _, row := range records {
+			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+		}
 	}
+
+	fmt.Fprint(responseWriter, response)
 }
 
 func main() {
 
 	http.HandleFunc("/echo", func(w http.ResponseWriter, r *http.Request) {
 
-		file, _, err := r.FormFile("file")
-		if catchError(err, w) == true {
-			return
-		}
-
-		defer file.Close()
-		records, err := csv.NewReader(file).ReadAll()
-		if catchError(err, w) == true {
-			return
-		}
-		var response string
-		for _, row := range records {
-			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
-		}
-		fmt.Fprint(w, response)
+		processFile("echo", w, r)
 	})
+
+	http.HandleFunc("/invert", func(w http.ResponseWriter, r *http.Request) {
+
+		processFile("invert", w, r)
+	})
+
+	http.HandleFunc("/flatten", func(w http.ResponseWriter, r *http.Request) {
+
+		processFile("flatten", w, r)
+	})
+
+	http.HandleFunc("/sum", func(w http.ResponseWriter, r *http.Request) {
+
+		processFile("sum", w, r)
+	})
+
+	http.HandleFunc("/multiply", func(w http.ResponseWriter, r *http.Request) {
+
+		processFile("multiply", w, r)
+	})
+
 	http.ListenAndServe(":8080", nil)
 }
