@@ -48,18 +48,24 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 
 	case "invert":
 
-		//var elements []int
 		strEle := ""
-		for row := range records {
+		count := 0
+		for count < len(records) {
 
-			// for val := range row {
-			// 	elements[count] = int(val)
-			// 	count++
-			// }
-			strEle += row
+			for _, row := range records {
 
-			response = fmt.Sprintf("%s%s", response, strings.Join(row, ","))
+				for key, value := range row {
+
+					if key == count {
+						strEle += string(value)
+					}
+				}
+			}
+			count++
+
 		}
+
+		response = fmt.Sprintf("%s%s", response, strEle)
 
 	case "flatten":
 
@@ -101,7 +107,7 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 	fmt.Fprint(responseWriter, response)
 }
 
-func invert(records []string) {
+func invert(records []string) string {
 
 	strEle := ""
 	count := 0
@@ -112,7 +118,7 @@ func invert(records []string) {
 			for key, value := range row {
 
 				if key == count {
-					strEle += value
+					strEle += string(value)
 				}
 			}
 		}
