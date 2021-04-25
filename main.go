@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -47,38 +48,66 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 
 	case "invert":
 
-		strEle := ""
+		var strEle [][]string
+		//var tempEle []string
 		count := 0
 		for count < len(records) {
-
+			countTwo := 0
 			for _, row := range records {
 
 				for key, value := range row {
 
 					if key == count {
-						strEle += string(value) + ","
+
+						//tempEle[countTwo] = string(value)
+						strEle[count][countTwo] = value
+						// 	if len(strEle)%5 != 0 {
+
+						// 		strEle += ","
+						// 	} else {
+
+						// 		strEle += "\n"
+						// 	}
+						countTwo++
+
 					}
+					//	response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+
 				}
+
 			}
+			//strEle[count] = tempEle
+
 			count++
 
 		}
 
-		response = fmt.Sprintf("%s%s", response, strEle)
+		for _, row := range strEle {
+			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+		}
+
+		//response = fmt.Sprintf("%s%s", response, strEle)
 
 	case "flatten":
 
+		strElem := ""
 		for _, row := range records {
-			response = fmt.Sprintf("%s%s", response, strings.Join(row, ","))
+			strElem += strings.Join(row, ",") + ","
+
 		}
+		response = fmt.Sprintf("%s%s", response, strings.TrimRight(strElem, ","))
 
 	case "sum":
 
 		totalSum := 0
 		for _, row := range records {
 
-			for val := range row {
-				totalSum += int(val)
+			for _, val := range row {
+				tempInt, err := strconv.ParseInt(val, 10, 64)
+
+				if err == nil {
+					totalSum += int(tempInt)
+				}
 			}
 		}
 
@@ -89,8 +118,18 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 		multiply := 0
 		for _, row := range records {
 
-			for val := range row {
-				multiply *= int(val)
+			for _, val := range row {
+
+				tempInt, err := strconv.ParseInt(val, 10, 64)
+				if err == nil && multiply != 0 {
+
+					multiply *= int(tempInt)
+				}
+				if err == nil && multiply == 0 {
+
+					multiply = int(tempInt)
+				}
+
 			}
 		}
 		response = fmt.Sprint(multiply)
