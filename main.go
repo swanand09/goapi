@@ -35,6 +35,7 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 		return
 	}
 
+	//count := 0
 	var response string
 
 	switch routeName {
@@ -47,27 +48,48 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 
 	case "invert":
 
-		for _, row := range records {
-			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+		//var elements []int
+		strEle := ""
+		for row := range records {
+
+			// for val := range row {
+			// 	elements[count] = int(val)
+			// 	count++
+			// }
+			strEle += row
+
+			response = fmt.Sprintf("%s%s", response, strings.Join(row, ","))
 		}
 
 	case "flatten":
 
 		for _, row := range records {
-			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+			response = fmt.Sprintf("%s%s", response, strings.Join(row, ","))
 		}
 
 	case "sum":
 
+		totalSum := 0
 		for _, row := range records {
-			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+
+			for val := range row {
+				totalSum += int(val)
+			}
 		}
+
+		response = fmt.Sprintf("%s%s\n", response, string(totalSum))
 
 	case "multiply":
 
+		multiply := 0
 		for _, row := range records {
-			response = fmt.Sprintf("%s%s\n", response, strings.Join(row, ","))
+
+			for val := range row {
+				multiply *= int(val)
+			}
 		}
+
+		response = fmt.Sprintf("%s%s\n", response, string(multiply))
 
 	default:
 
@@ -77,6 +99,29 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 	}
 
 	fmt.Fprint(responseWriter, response)
+}
+
+func invert(records []string) {
+
+	strEle := ""
+	count := 0
+	for count < len(records) {
+
+		for _, row := range records {
+
+			for key, value := range row {
+
+				if key == count {
+					strEle += value
+				}
+			}
+		}
+		count++
+
+	}
+
+	return strEle
+
 }
 
 func main() {

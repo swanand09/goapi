@@ -16,7 +16,7 @@ func printmessage(s string) {
 	fmt.Println(s)
 }
 
-func main() {
+func test() {
 	// a goroutine
 	go printmessage("Hello World!")
 	// another go routine
