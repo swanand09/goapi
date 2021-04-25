@@ -4,14 +4,13 @@ import (
 	"encoding/csv"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 )
 
 // Run with
 //		go run .
 // Send request with:
-//		curl -F 'file=@/path/matrix.csv' "localhost:8080/echo"
+//		curl -F 'file=@matrix.csv' "localhost:8080/echo"
 
 func catchError(err error, w http.ResponseWriter) bool {
 	if err != nil {
@@ -23,8 +22,8 @@ func catchError(err error, w http.ResponseWriter) bool {
 
 func processFile(routeName string, responseWriter http.ResponseWriter, request *http.Request) {
 
-	//file, _, err := request.FormFile("file")
-	file, err := os.Open("matrix.csv")
+	file, _, err := request.FormFile("file")
+	//file, err := os.Open("matrix.csv")
 	if catchError(err, responseWriter) == true {
 		return
 	}
@@ -57,7 +56,7 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 				for key, value := range row {
 
 					if key == count {
-						strEle += string(value)
+						strEle += string(value) + ","
 					}
 				}
 			}
@@ -83,7 +82,7 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 			}
 		}
 
-		response = fmt.Sprintf("%s%s\n", response, string(totalSum))
+		response = fmt.Sprint(totalSum)
 
 	case "multiply":
 
@@ -94,8 +93,8 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 				multiply *= int(val)
 			}
 		}
-
-		response = fmt.Sprintf("%s%s\n", response, string(multiply))
+		response = fmt.Sprint(multiply)
+		//response = fmt.Sprintf("%s%s\n", response, string(multiply))
 
 	default:
 
@@ -105,29 +104,6 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 	}
 
 	fmt.Fprint(responseWriter, response)
-}
-
-func invert(records []string) string {
-
-	strEle := ""
-	count := 0
-	for count < len(records) {
-
-		for _, row := range records {
-
-			for key, value := range row {
-
-				if key == count {
-					strEle += string(value)
-				}
-			}
-		}
-		count++
-
-	}
-
-	return strEle
-
 }
 
 func main() {
