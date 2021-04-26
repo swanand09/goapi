@@ -1,8 +1,6 @@
 # How to run the code?
-- use VScode
-- open main.go
-- go to debug and click play "launch file"
-- go to command line and type:
+- run `go run .`
+- open new tab in command line and type:
     - `curl -F 'file=@matrix.csv' "localhost:8080/echo"`
     - `curl -F 'file=@matrix.csv' "localhost:8080/invert"`
     - `curl -F 'file=@matrix.csv' "localhost:8080/flatten"`
