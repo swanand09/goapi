@@ -30,13 +30,13 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 
 	file, _, err := request.FormFile("file")
 	//file, err := os.Open("matrix.csv")
-	if catchError(err, responseWriter) == true {
+	if catchError(err, responseWriter) {
 		return
 	}
 
 	defer file.Close()
 	records, err := csv.NewReader(file).ReadAll()
-	if catchError(err, responseWriter) == true {
+	if catchError(err, responseWriter) {
 		return
 	}
 
@@ -77,7 +77,6 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 			}
 			count++
 		}
-
 		response = fmt.Sprintf("%s%s", response, strEle)
 
 	case "flatten":
@@ -127,7 +126,6 @@ func processFile(routeName string, responseWriter http.ResponseWriter, request *
 		}
 		response = fmt.Sprint(multiply)
 		response += "\n"
-		//response = fmt.Sprintf("%s%s\n", response, string(multiply))
 
 	default:
 
