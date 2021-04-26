@@ -1,5 +1,5 @@
 # How to run the code?
-- Use VScode
+- use VScode
 - open main.go
 - go to debug and click play "launch file"
 - go to command line and type:
