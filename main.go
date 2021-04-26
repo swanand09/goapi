@@ -13,6 +13,7 @@ import (
 // Send request with:
 //		curl -F 'file=@matrix.csv' "localhost:8080/echo"
 
+//catch error
 func catchError(err error, w http.ResponseWriter) bool {
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("error %s", err.Error())))
@@ -21,6 +22,10 @@ func catchError(err error, w http.ResponseWriter) bool {
 	return false
 }
 
+//execute command based from curl
+//curl -F 'file=@matrix.csv' "localhost:8080/echo"
+//curl -F 'file=@matrix.csv' "localhost:8080/invert"
+//curl -F 'file=@matrix.csv' "localhost:8080/flatten"
 func processFile(routeName string, responseWriter http.ResponseWriter, request *http.Request) {
 
 	file, _, err := request.FormFile("file")

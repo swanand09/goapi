@@ -1,4 +1,17 @@
-# League Backend Challenge
+# How to run the code?
+- Use VScode
+- open main.go
+- go to debug and click play "launch file"
+- go to command line and type:
+    - `curl -F 'file=@matrix.csv' "localhost:8080/echo"`
+    - `curl -F 'file=@matrix.csv' "localhost:8080/invert"`
+    - `curl -F 'file=@matrix.csv' "localhost:8080/flatten"`
+    - `curl -F 'file=@matrix.csv' "localhost:8080/sum"`
+    - `curl -F 'file=@matrix.csv' "localhost:8080/multiply"`
+
+
+
+## League Backend Challenge
 
 In main.go you will find a basic web server written in GoLang. It accepts a single request _/echo_. Extend the webservice with the ability to perform the following operations
 
