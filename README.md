@@ -9,7 +9,7 @@
 
 
 
-## League Backend Challenge
+## Backend Challenge
 
 In main.go you will find a basic web server written in GoLang. It accepts a single request _/echo_. Extend the webservice with the ability to perform the following operations
 
